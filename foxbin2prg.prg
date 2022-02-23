@@ -11585,16 +11585,16 @@ Define Class c_conversor_prg_a_vcx As c_conversor_prg_a_bin
 *!*	</change>
 *!*	</pdm>
 
-								SELECT TABLABIN
-								LOCATE;
-									FOR OBJNAME==loClase._ObjName
-								IF FOUND() THEN
-*SF 20211207
-*SET STEP ON
-									Error loLang.C_ClassTwice_Header_LOC + ;
-										loLang.C_ClassTwice_Lib_LOC + JUSTFNAME( DBF() ) + ;
-										loLang.C_ClassTwice_Class_LOC + loClase._ObjName+0h0D0A
-								ENDIF &&FOUND() 
+*!*									SELECT TABLABIN
+*!*									LOCATE;
+*!*										FOR OBJNAME==loClase._ObjName
+*!*									IF FOUND() THEN
+*!*	*SF 20211207
+*!*	*SET STEP ON
+*!*										Error loLang.C_ClassTwice_Header_LOC + ;
+*!*											loLang.C_ClassTwice_Lib_LOC + JUSTFNAME( DBF() ) + ;
+*!*											loLang.C_ClassTwice_Class_LOC + loClase._ObjName+0h0D0A
+*!*									ENDIF &&FOUND() 
 
 *!*	/Changed by SF 07.12.2021
 
@@ -15240,9 +15240,11 @@ Define Class c_conversor_bin_a_prg As c_conversor_base
 		Scan For PLATFORM = "WINDOWS" And Empty(Parent) And Empty(RESERVED1)
 			lcParentObjName	= Lower(OBJNAME)
 			Delete
-			Skip
-			Delete Rest While Getwordnum(Lower(Parent) + '.', 1, '.') == lcParentObjName
-			Skip -1
+			IF (NOT EMPTY(lcParentObjName))	
+				Skip
+				Delete Rest While Getwordnum(Lower(Parent) + '.', 1, '.') == lcParentObjName
+				Skip -1
+			ENDIF	
 		Endscan
 
 		Set Deleted &lcSetDeleted.
